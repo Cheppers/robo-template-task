@@ -7,6 +7,7 @@ use Composer\IO\IOInterface;
 use Composer\Script\Event;
 use Stringy\StaticStringy;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 
 class Scripts
 {
@@ -112,6 +113,7 @@ class Scripts
     protected static function oneTimeMain(): void
     {
         static::renamePackage();
+        static::updateReadMe();
         static::gitInit();
     }
 
@@ -262,7 +264,7 @@ class Scripts
             $psr4 = static::$package[$key]['psr-4'];
             static::$package[$key]['psr-4'] = [];
             foreach ($psr4 as $namespace => $dir) {
-                $namespace = static::replaceNamespace($namespace, "$oldNamespace\\", "$newNamespace\\");
+                $namespace = static::replaceNamespace($namespace, $oldNamespace, $newNamespace);
                 static::$package[$key]['psr-4'][$namespace] = $dir;
             }
         }
@@ -271,46 +273,41 @@ class Scripts
             if (is_string($scripts)) {
                 static::$package['scripts'][$key] = static::replaceNamespace(
                     $scripts,
-                    "\\$oldNamespace\\",
-                    "\\$newNamespace\\"
+                    $oldNamespace,
+                    $newNamespace
                 );
             } else {
                 foreach ($scripts as $i => $script) {
                     static::$package['scripts'][$key][$i] = static::replaceNamespace(
                         $script,
-                        "\\$oldNamespace\\",
-                        "\\$newNamespace\\"
+                        $oldNamespace,
+                        $newNamespace
                     );
                 }
             }
         }
     }
 
-    protected static function replaceNamespace(string $namespace, string $old, string $new): string
-    {
-        return preg_replace('/^' . preg_quote($old) . '/', $new, $namespace);
-    }
-
     protected static function renamePackageSource(): void
     {
-        $oldNamespace = static::$oldVendorNamespace . '\\' . static::$oldNameNamespace . '\\';
-        $newNamespace = static::$inputNewVendorNamespace . '\\' . static::$inputNewNameNamespace . '\\';
+        $oldNamespace = static::$oldVendorNamespace . '\\' . static::$oldNameNamespace;
+        $newNamespace = static::$inputNewVendorNamespace . '\\' . static::$inputNewNameNamespace;
 
-        $files = new Finder();
-        $files
+        /** @var \Symfony\Component\Finder\Finder $files */
+        $files = (new Finder())
             ->in([static::$packageRootDir . '/src'])
+            ->in([static::$packageRootDir . '/tests'])
             ->files()
-            ->name('*.php');
-        // @todo Replace everywhere, not just the namespaces. (For example type-hints).
+            ->name('/.+\.(php|yml)$/');
         foreach ($files as $file) {
-            file_put_contents(
-                $file->getPathname(),
-                preg_replace(
-                    '/(\W)' . preg_quote($oldNamespace) . '(\W)/',
-                    "\\1$newNamespace\\2",
-                    file_get_contents($file->getPathname())
-                )
-            );
+            static::replaceNamespaceInFileContent($file, $oldNamespace, $newNamespace);
+        }
+
+        $fileNames = [
+            static::$packageRootDir . '/codeception.yml',
+        ];
+        foreach ($fileNames as $fileName) {
+            static::replaceNamespaceInFileContent($fileName, $oldNamespace, $newNamespace);
         }
     }
 
@@ -325,6 +322,55 @@ class Scripts
         static::$event->getIO()->write(
             sprintf('The new namespace name is "%s"', $namespace),
             true
+        );
+    }
+
+    protected static function updateReadMe(): void
+    {
+        $pattern = '/^' . preg_quote('Robo\\') . '/';
+        $nameNamespaceShort = preg_replace($pattern, '', static::$inputNewNameNamespace);
+        $nameNamespaceShort = StaticStringy::humanize($nameNamespaceShort);
+        $travisBadge = static::getTravisBadgeMarkdown();
+        $codeCovBadge = static::getCodeCovBadgeMarkdown();
+
+        $content = <<< MARKDOWN
+# Robo task wrapper for $nameNamespaceShort
+
+$travisBadge
+$codeCovBadge
+
+@todo
+
+MARKDOWN;
+
+        // @todo Error handling.
+        file_put_contents(static::$packageRootDir . '/README.md', $content);
+    }
+
+    /**
+     * @param string|\Symfony\Component\Finder\SplFileInfo
+     * @param string $old
+     * @param string $new
+     *
+     * @return int|false
+     */
+    protected static function replaceNamespaceInFileContent($file, string $old, string $new)
+    {
+        $fileName = ($file instanceof SplFileInfo) ? $file->getPathname() : $file;
+
+        // @todo Error handling.
+        return file_put_contents(
+            $fileName,
+            static::replaceNamespace(file_get_contents($fileName), $old, $new)
+        );
+    }
+
+    protected static function replaceNamespace(string $text, string $old, string $new): string
+    {
+        return preg_replace(
+            '/(^|\W)' . preg_quote($old) . '(\W)/',
+            "$1{$new}$2",
+            $text
         );
     }
 
@@ -407,5 +453,23 @@ class Scripts
         }
 
         return $input;
+    }
+
+    protected static function getTravisBadgeMarkdown(): string
+    {
+        $vendorMachine = static::$inputNewVendorMachine;
+        $nameMachine = static::$inputNewNameMachine;
+        $baseUrl = "https://travis-ci.org/{$vendorMachine}/{$nameMachine}";
+
+        return "[![Build Status]({$baseUrl}.svg?branch=master)]({$baseUrl})";
+    }
+
+    protected static function getCodeCovBadgeMarkdown(): string
+    {
+        $vendorMachine = static::$inputNewVendorMachine;
+        $nameMachine = static::$inputNewNameMachine;
+        $baseUrl = "https://codecov.io/gh/{$vendorMachine}/{$nameMachine}";
+
+        return "[![codecov]({$baseUrl}/branch/master/graph/badge.svg)]({$baseUrl})";
     }
 }
