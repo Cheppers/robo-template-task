@@ -76,6 +76,11 @@ class OneTime
      */
     protected static $inputNewNameNamespace = '';
 
+    /**
+     * @var string
+     */
+    protected static $envNamePrefix = '';
+
     public static function postCreateProjectCmd(Event $event): bool
     {
         static::$event = $event;
@@ -159,15 +164,15 @@ class OneTime
 
     protected static function renamePackageInput(): void
     {
-        if (static::$event->getIO()->isInteractive() === false) {
-            // @todo Provide default values or use CLI arguments.
-            return;
-        }
+        $envVars = static::getEnvVars();
 
         $cwd = static::$packageRootDir === '.' ? getcwd() : static::$packageRootDir;
         $cwdParts = explode('/', $cwd);
-        $defaultNewNameMachine = array_pop($cwdParts);
-        $defaultNewVendorMachine = array_pop($cwdParts);
+
+        $cwdPartNameMachine = array_pop($cwdParts);
+        $cwdPartVendorMachine = array_pop($cwdParts);
+        $defaultNewVendorMachine = $envVars['vendorMachine'] ?: $cwdPartVendorMachine;
+        $defaultNewNameMachine = $envVars['nameMachine'] ?: $cwdPartNameMachine;
 
         $questionPatternMachine = implode("\n", [
             '<question>Rename the package (%d/4) - %s:</question>',
@@ -197,18 +202,20 @@ class OneTime
             $defaultNewVendorMachine
         );
 
+        $defaultNewVendorNamespace = $envVars['vendorNamespace']
+            ?: StaticStringy::upperCamelize(static::$inputNewVendorMachine);
         static::$inputNewVendorNamespace = static::$event->getIO()->askAndValidate(
             sprintf(
                 $questionPatternNamespace,
                 2,
                 'vendor as namespace',
-                StaticStringy::upperCamelize(static::$inputNewVendorMachine)
+                $defaultNewVendorNamespace
             ),
             function (?string $input) {
                 return static::validatePackageNameNamespace($input);
             },
             3,
-            StaticStringy::upperCamelize(static::$inputNewVendorMachine)
+            $defaultNewVendorNamespace
         );
 
         static::$inputNewNameMachine = static::$event->getIO()->askAndValidate(
@@ -225,11 +232,12 @@ class OneTime
             $defaultNewNameMachine
         );
 
-        $defaultNewNameNamespace = StaticStringy::upperCamelize(preg_replace(
-            '/^robo-/',
-            '',
-            static::$inputNewNameMachine
-        ));
+        $defaultNewNameNamespace = $envVars['nameNamespace']
+            ?: StaticStringy::upperCamelize(preg_replace(
+                '/^robo-/',
+                '',
+                static::$inputNewNameMachine
+            ));
         static::$inputNewNameNamespace = static::$event->getIO()->askAndValidate(
             sprintf(
                 $questionPatternNamespace,
@@ -500,5 +508,44 @@ MARKDOWN;
                 true,
                 $verbosity
             );
+    }
+
+    protected static function getEnvVars(): array
+    {
+        $options = [
+            'vendorMachine' => null,
+            'vendorNamespace' => null,
+            'nameMachine' => null,
+            'nameNamespace' => null,
+        ];
+
+        foreach (array_keys($options) as $name) {
+            $options[$name] = static::getEnvVar($name);
+        }
+
+        return $options;
+    }
+
+    protected static function getEnvVar(string $name): string
+    {
+        return getenv(static::getEnvNamePrefix() . '_' . static::toEnvName($name));
+    }
+
+    protected static function getEnvNamePrefix(): string
+    {
+        if (!static::$envNamePrefix) {
+            /** @var \Composer\Package\Package $package */
+            $package = static::$event->getComposer()->getPackage();
+            list(, $name) = explode('/', $package->getName());
+
+            static::$envNamePrefix = static::toEnvName($name);
+        }
+
+        return static::$envNamePrefix;
+    }
+
+    protected static function toEnvName(string $name): string
+    {
+        return StaticStringy::toUpperCase(StaticStringy::underscored($name));
     }
 }
