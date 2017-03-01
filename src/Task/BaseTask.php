@@ -24,6 +24,9 @@ abstract class BaseTask extends RoboBaseTask implements AssetJarAwareInterface
         $this->setOptions($options);
     }
 
+    /**
+     * @return $this
+     */
     abstract public function setOptions(array $option);
 
     public function getTaskName(): string

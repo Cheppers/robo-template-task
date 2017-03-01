@@ -12,7 +12,7 @@ class FooTask extends BaseTask
     protected $taskName = 'Foo';
 
     /**
-     * @return $this
+     * {@inheritdoc}
      */
     public function setOptions(array $options)
     {

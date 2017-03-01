@@ -42,7 +42,7 @@
             "\\Cheppers\\Robo\\TemplateTask\\Composer\\Scripts::postUpdateCmd"
         ],
         "post-create-project-cmd": [
-            "\\Cheppers\\Robo\\TemplateTask\\Composer\\Scripts::postCreateProjectCmd"
+            "\\Cheppers\\Robo\\TemplateTask\\Composer\\OneTime::postCreateProjectCmd"
         ]
     }
 }
