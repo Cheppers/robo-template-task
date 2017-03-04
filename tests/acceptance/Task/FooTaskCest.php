@@ -9,9 +9,10 @@ class FooTaskCest
 {
     public function runFoo(AcceptanceTester $I)
     {
-        $I->runRoboTask(FooRoboFile::class, 'basic');
-        $I->assertEquals(0, $I->getRoboTaskExitCode());
-        $I->assertEquals('', $I->getRoboTaskStdOutput());
-        $I->assertEquals(" [Foo] Okay\n", $I->getRoboTaskStdError());
+        $id = 'basic';
+        $I->runRoboTask($id, FooRoboFile::class, 'basic');
+        $I->assertEquals(0, $I->getRoboTaskExitCode($id));
+        $I->assertEquals('', $I->getRoboTaskStdOutput($id));
+        $I->assertEquals(" [Foo] Okay\n", $I->getRoboTaskStdError($id));
     }
 }
