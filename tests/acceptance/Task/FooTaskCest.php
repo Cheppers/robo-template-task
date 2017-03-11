@@ -1,6 +1,6 @@
 <?php
 
-namespace Cheppers\Robo\TemplateTask\Test\Task;
+namespace Cheppers\Robo\TemplateTask\Tests\Acceptance\Task;
 
 use Cheppers\Robo\TemplateTask\Test\AcceptanceTester;
 use Cheppers\Robo\TemplateTask\Test\Helper\RoboFiles\FooRoboFile;

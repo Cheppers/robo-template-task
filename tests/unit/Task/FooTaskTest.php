@@ -1,6 +1,6 @@
 <?php
 
-namespace Cheppers\Robo\TemplateTask\Test\Task;
+namespace Cheppers\Robo\TemplateTask\Tests\Unit\Task;
 
 use Codeception\Test\Unit;
 
