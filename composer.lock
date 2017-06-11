@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fb02395bc95f361df0a3a0ae9a86e394",
+    "content-hash": "49417e10a4f13e202d9dff9f2c79f5a8",
     "packages": [
         {
             "name": "cheppers/asset-jar",
@@ -1347,20 +1347,20 @@
         },
         {
             "name": "danielstjules/stringy",
-            "version": "2.3.2",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/danielstjules/Stringy.git",
-                "reference": "4e214a5195fae3fb558e81b1c6010678f7600643"
+                "reference": "2288363663d94ce11c9ca555f7c760e9f799bb74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/danielstjules/Stringy/zipball/4e214a5195fae3fb558e81b1c6010678f7600643",
-                "reference": "4e214a5195fae3fb558e81b1c6010678f7600643",
+                "url": "https://api.github.com/repos/danielstjules/Stringy/zipball/2288363663d94ce11c9ca555f7c760e9f799bb74",
+                "reference": "2288363663d94ce11c9ca555f7c760e9f799bb74",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0",
+                "php": ">=5.4.0",
                 "symfony/polyfill-mbstring": "~1.1"
             },
             "require-dev": {
@@ -1399,7 +1399,7 @@
                 "utility",
                 "utils"
             ],
-            "time": "2016-05-02T15:18:10+00:00"
+            "time": "2017-04-12T15:20:39+00:00"
         },
         {
             "name": "doctrine/instantiator",

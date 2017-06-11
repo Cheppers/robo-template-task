@@ -108,16 +108,22 @@ class RoboFile extends \Robo\Tasks
     }
 
     /**
-     * Run code style checkers.
+     * Run the static code analyzers.
      */
-    public function lint(): CollectionBuilder
-    {
-        return $this
-            ->collectionBuilder()
-            ->addTaskList([
-                'lint.composer.lock' => $this->taskComposerValidate(),
-                'lint.phpcs.psr2' => $this->getTaskPhpcsLint(),
-            ]);
+    public function lint(
+        array $options = [
+            'skip-composer-lock' => false,
+        ]
+    ): CollectionBuilder {
+        $cb = $this->collectionBuilder();
+
+        if (empty($options['skip-composer-lock'])) {
+            $cb->addTask($this->taskComposerValidate());
+        }
+
+        $cb->addTask($this->getTaskPhpcsLint());
+
+        return $cb;
     }
 
     protected function errorOutput(): ?OutputInterface
