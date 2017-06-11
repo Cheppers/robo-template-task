@@ -149,7 +149,7 @@ class OneTime
         unset(static::$composerInfo['scripts']['post-create-project-cmd']);
 
 
-        $fileName = static::$packageRootDir . '/src/Composer/OneTime.php';
+        $fileName = static::$packageRootDir . '/src-dev/Composer/OneTime.php';
         static::writeLineVerbose("Delete <comment>'$fileName'</comment>");
         unlink($fileName);
     }
@@ -308,6 +308,7 @@ class OneTime
         /** @var \Symfony\Component\Finder\Finder $files */
         $files = (new Finder())
             ->in([static::$packageRootDir . '/src'])
+            ->in([static::$packageRootDir . '/src-dev'])
             ->in([static::$packageRootDir . '/tests'])
             ->files()
             ->name('/.+\.(php|yml)$/');

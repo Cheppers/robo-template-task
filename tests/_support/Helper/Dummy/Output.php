@@ -44,4 +44,12 @@ class Output extends ConsoleOutput
     {
         $this->output .= $message . ($newline ? "\n" : '');
     }
+
+    /**
+     * @return \Symfony\Component\Console\Output\OutputInterface|\Symfony\Component\Console\Output\StreamOutput|$this
+     */
+    public function getErrorOutput()
+    {
+        return parent::getErrorOutput();
+    }
 }
