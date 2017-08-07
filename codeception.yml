@@ -1,5 +1,5 @@
 
-namespace: Cheppers\Robo\TemplateTask\Test
+namespace: Sweetchuck\Robo\TemplateTask\Test
 
 actor: Tester
 

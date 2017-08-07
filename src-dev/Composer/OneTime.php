@@ -1,8 +1,8 @@
 <?php
 
-namespace Cheppers\Robo\TemplateTask\Composer;
+namespace Sweetchuck\Robo\TemplateTask\Composer;
 
-use Cheppers\GitHooks\Main as GitHooksComposerScripts;
+use Sweetchuck\GitHooks\Composer\Scripts as GitHooks;
 use Composer\IO\IOInterface;
 use Composer\Script\Event;
 use Stringy\StaticStringy;
@@ -403,7 +403,7 @@ MARKDOWN;
             }
         }
 
-        GitHooksComposerScripts::deploy(static::$event);
+        GitHooks::deploy(static::$event);
     }
 
     /**

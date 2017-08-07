@@ -1,6 +1,6 @@
 <?php
 
-namespace Cheppers\Robo\TemplateTask\Task;
+namespace Sweetchuck\Robo\TemplateTask\Task;
 
 use Robo\Result;
 

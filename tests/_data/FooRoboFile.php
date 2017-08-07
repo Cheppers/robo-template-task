@@ -1,6 +1,6 @@
 <?php
 
-use Cheppers\Robo\TemplateTask\TemplateTaskLoader;
+use Sweetchuck\Robo\TemplateTask\TemplateTaskLoader;
 use Robo\Contract\TaskInterface;
 
 // @codingStandardsIgnoreStart

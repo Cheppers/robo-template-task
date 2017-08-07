@@ -1,6 +1,6 @@
 <?php
 
-namespace Cheppers\Robo\TemplateTask\Test;
+namespace Sweetchuck\Robo\TemplateTask\Test;
 
 /**
  * Inherited Methods

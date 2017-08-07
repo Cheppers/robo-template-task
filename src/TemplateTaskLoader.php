@@ -1,13 +1,13 @@
 <?php
 
-namespace Cheppers\Robo\TemplateTask;
+namespace Sweetchuck\Robo\TemplateTask;
 
 use Robo\Collection\CollectionBuilder;
 
 trait TemplateTaskLoader
 {
     /**
-     * @return \Cheppers\Robo\TemplateTask\Task\FooTask|\Robo\Collection\CollectionBuilder
+     * @return \Sweetchuck\Robo\TemplateTask\Task\FooTask|\Robo\Collection\CollectionBuilder
      */
     protected function taskFoo(array $options = []): CollectionBuilder
     {

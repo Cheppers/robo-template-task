@@ -1,5 +1,5 @@
 {
-    "name": "cheppers/robo-template-task",
+    "name": "sweetchuck/robo-template-task",
     "description": "Template to create a new Robo task.",
     "license": "GPL-2.0",
     "config": {
@@ -10,29 +10,29 @@
     "prefer-stable": true,
     "require": {
         "php": ">=7.1",
-        "cheppers/asset-jar": "^0.0",
+        "sweetchuck/asset-jar": "^0.0",
         "consolidation/robo": "^1.0"
     },
     "require-dev": {
-        "cheppers/git-hooks": "^0.0",
-        "cheppers/robo-git": "^0.0",
-        "cheppers/robo-phpcs": "^0.0",
         "codeception/codeception": "^2.2",
         "danielstjules/stringy": "^3.0",
+        "sweetchuck/git-hooks": "^0.0",
+        "sweetchuck/robo-git": "^0.0",
+        "sweetchuck/robo-phpcs": "^0.0",
         "symfony/finder": "^3.2",
         "webmozart/path-util": "^2.3"
     },
     "autoload": {
         "psr-4": {
-            "Cheppers\\Robo\\TemplateTask\\": "src/"
+            "Sweetchuck\\Robo\\TemplateTask\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Cheppers\\Robo\\TemplateTask\\Composer\\": "src-dev/Composer/",
-            "Cheppers\\Robo\\TemplateTask\\Test\\Helper\\": "tests/_support/Helper/",
-            "Cheppers\\Robo\\TemplateTask\\Tests\\Acceptance\\": "tests/acceptance/",
-            "Cheppers\\Robo\\TemplateTask\\Tests\\Unit\\": "tests/unit/"
+            "Sweetchuck\\Robo\\TemplateTask\\Composer\\": "src-dev/Composer/",
+            "Sweetchuck\\Robo\\TemplateTask\\Test\\Helper\\": "tests/_support/Helper/",
+            "Sweetchuck\\Robo\\TemplateTask\\Tests\\Acceptance\\": "tests/acceptance/",
+            "Sweetchuck\\Robo\\TemplateTask\\Tests\\Unit\\": "tests/unit/"
         },
         "classmap": [
             "tests/_data/FooRoboFile.php"
@@ -40,13 +40,13 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "\\Cheppers\\Robo\\TemplateTask\\Composer\\Scripts::postInstallCmd"
+            "\\Sweetchuck\\Robo\\TemplateTask\\Composer\\Scripts::postInstallCmd"
         ],
         "post-update-cmd": [
-            "\\Cheppers\\Robo\\TemplateTask\\Composer\\Scripts::postUpdateCmd"
+            "\\Sweetchuck\\Robo\\TemplateTask\\Composer\\Scripts::postUpdateCmd"
         ],
         "post-create-project-cmd": [
-            "\\Cheppers\\Robo\\TemplateTask\\Composer\\OneTime::postCreateProjectCmd"
+            "\\Sweetchuck\\Robo\\TemplateTask\\Composer\\OneTime::postCreateProjectCmd"
         ]
     }
 }

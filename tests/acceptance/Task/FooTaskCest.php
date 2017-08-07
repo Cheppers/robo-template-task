@@ -1,8 +1,8 @@
 <?php
 
-namespace Cheppers\Robo\TemplateTask\Tests\Acceptance\Task;
+namespace Sweetchuck\Robo\TemplateTask\Tests\Acceptance\Task;
 
-use Cheppers\Robo\TemplateTask\Test\AcceptanceTester;
+use Sweetchuck\Robo\TemplateTask\Test\AcceptanceTester;
 
 class FooTaskCest
 {
