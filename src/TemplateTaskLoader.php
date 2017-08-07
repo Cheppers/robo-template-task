@@ -7,10 +7,10 @@ use Robo\Collection\CollectionBuilder;
 trait TemplateTaskLoader
 {
     /**
-     * @return \Sweetchuck\Robo\TemplateTask\Task\FooTask|\Robo\Collection\CollectionBuilder
+     * @return \Sweetchuck\Robo\TemplateTask\Task\ListTask|\Robo\Collection\CollectionBuilder
      */
-    protected function taskFoo(array $options = []): CollectionBuilder
+    protected function taskTemplateList(array $options = []): CollectionBuilder
     {
-        return $this->task(Task\FooTask::class, $options);
+        return $this->task(Task\ListTask::class, $options);
     }
 }

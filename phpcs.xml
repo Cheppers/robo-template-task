@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="RoboESLint">
+<ruleset name="RoboTask">
     <file>src/</file>
     <file>src-dev/Composer/</file>
     <file>tests/</file>

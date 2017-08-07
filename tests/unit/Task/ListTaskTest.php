@@ -4,7 +4,7 @@ namespace Sweetchuck\Robo\TemplateTask\Tests\Unit\Task;
 
 use Codeception\Test\Unit;
 
-class FooTaskTest extends Unit
+class ListTaskTest extends Unit
 {
     /**
      * @var \Sweetchuck\Robo\TemplateTask\Test\UnitTester

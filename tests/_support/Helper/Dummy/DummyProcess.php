@@ -2,7 +2,9 @@
 
 namespace Sweetchuck\Robo\TemplateTask\Test\Helper\Dummy;
 
-class Process extends \Symfony\Component\Process\Process
+use Symfony\Component\Process\Process;
+
+class DummyProcess extends Process
 {
     /**
      * @var array
