@@ -2,15 +2,11 @@
 
 namespace Sweetchuck\Robo\TemplateTask\Task;
 
-use Sweetchuck\AssetJar\AssetJarAware;
-use Sweetchuck\AssetJar\AssetJarAwareInterface;
 use Robo\Task\BaseTask as RoboBaseTask;
 use Robo\TaskInfo;
 
-abstract class BaseTask extends RoboBaseTask implements AssetJarAwareInterface
+abstract class BaseTask extends RoboBaseTask
 {
-    use AssetJarAware;
-
     /**
      * @var string
      */
