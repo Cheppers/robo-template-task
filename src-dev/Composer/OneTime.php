@@ -1,13 +1,14 @@
 <?php
 
-namespace Cheppers\Robo\TemplateTask\Composer;
+namespace Sweetchuck\Robo\TemplateTask\Composer;
 
-use Cheppers\GitHooks\Main as GitHooksComposerScripts;
+use Sweetchuck\GitHooks\Composer\Scripts as GitHooks;
 use Composer\IO\IOInterface;
 use Composer\Script\Event;
 use Stringy\StaticStringy;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\Process\Process;
 
 class OneTime
 {
@@ -322,6 +323,31 @@ class OneTime
         foreach ($fileNames as $fileName) {
             static::replaceNamespaceInFileContent($fileName, $oldNamespace, $newNamespace);
         }
+
+        $newNamespaceShort = explode('\\', static::$inputNewNameNamespace);
+        $newNamespaceShort = end($newNamespaceShort);
+
+        $oldFileNames = [
+            'src/TemplateTaskLoader.php',
+            'tests/_support/Helper/RoboFiles/TemplateRoboFile.php',
+            'tests/acceptance/Task/ListTaskCest.php',
+        ];
+        $replacePairs = [
+            'TemplateTaskLoader' => "{$newNamespaceShort}TaskLoader",
+            'taskTemplate' => "task{$newNamespaceShort}",
+            'TemplateRoboFile' => "{$newNamespaceShort}RoboFile",
+        ];
+        foreach ($oldFileNames as $oldFileName) {
+            $newFileName = str_replace('Template', $newNamespaceShort, $oldFileName);
+
+            $oldFileName = static::$packageRootDir . "/$oldFileName";
+            $newFileName = static::$packageRootDir . "/$newFileName";
+            if ($oldFileName !== $newFileName) {
+                rename($oldFileName, $newFileName);
+            }
+
+            static::replacePairsInFile($newFileName, $replacePairs);
+        }
     }
 
     protected static function renamePackageSummary(): void
@@ -391,19 +417,33 @@ MARKDOWN;
         );
     }
 
+    /**
+     * @param string|\SplFileInfo $file
+     * @param array $fromTo
+     *
+     * @return bool|int
+     */
+    protected static function replacePairsInFile($file, array $fromTo)
+    {
+        $fileName = ($file instanceof SplFileInfo) ? $file->getPathname() : $file;
+
+        return file_put_contents(
+            $fileName,
+            strtr(
+                file_get_contents($fileName),
+                $fromTo
+            )
+        );
+    }
+
     protected static function gitInit(): void
     {
         if (!file_exists(static::$packageRootDir . '/.git')) {
             $command = sprintf('cd %s && git init', static::$packageRootDir);
-            $output = [];
-            $exit_code = 0;
-            exec($command, $output, $exit_code);
-            if ($exit_code !== 0) {
-                // @todo Do something.
-            }
+            (new Process($command))->run();
         }
 
-        GitHooksComposerScripts::deploy(static::$event);
+        GitHooks::deploy(static::$event);
     }
 
     /**
